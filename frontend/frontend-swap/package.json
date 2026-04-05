@@ -4,20 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite --host 0.0.0.0 --port 5173",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
     "ethers": "^6.16.0",
-    "framer-motion": "^12.38.0",
-    "rainbowkit": "^0.0.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "viem": "^2.47.6",
-    "wagmi": "^3.6.0"
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
