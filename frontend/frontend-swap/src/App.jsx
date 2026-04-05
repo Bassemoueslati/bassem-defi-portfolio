@@ -1,9 +1,7 @@
-import { Suspense, lazy, useState } from "react";
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Swap from "./components/Swap";
-
-const FloatingTokens = lazy(() => import("./components/FloatingTokens"));
-const Liquidity = lazy(() => import("./components/Liquidity"));
+import Liquidity from "./components/Liquidity";
 
 const BRAND_NAME = "BassemBlockCrypto";
 
@@ -48,7 +46,7 @@ const TERMS = [
   },
 ];
 
-function TradePage() {
+function TradePage({ account, chainId }) {
   return (
     <div className="hero-grid">
       <div className="hero-copy">
@@ -66,7 +64,7 @@ function TradePage() {
       </div>
 
       <div className="hero-card-wrap">
-        <Swap />
+        <Swap account={account} chainId={chainId} />
         <p className="page-note">
           Achetez et vendez des cryptos sans frais d'application via une interface claire.
         </p>
@@ -95,7 +93,7 @@ function ExplorePage() {
   );
 }
 
-function PoolPage() {
+function PoolPage({ account, chainId }) {
   return (
     <div className="hero-grid">
       <div className="hero-copy">
@@ -107,9 +105,7 @@ function PoolPage() {
         </p>
       </div>
       <div className="hero-card-wrap">
-        <Suspense fallback={<div className="loading-panel">Chargement du module Pool...</div>}>
-          <Liquidity />
-        </Suspense>
+        <Liquidity account={account} chainId={chainId} />
       </div>
     </div>
   );
@@ -137,19 +133,27 @@ function TermsPage() {
 
 export default function App() {
   const [tab, setTab] = useState("trade");
+  const [wallet, setWallet] = useState({
+    account: "",
+    chainId: null,
+  });
 
   return (
     <div className="app-shell">
-      <Suspense fallback={null}>
-        <FloatingTokens active={tab === "trade"} />
-      </Suspense>
-      <Navbar tab={tab} onTab={setTab} brand={BRAND_NAME} />
+      <Navbar
+        tab={tab}
+        onTab={setTab}
+        brand={BRAND_NAME}
+        account={wallet.account}
+        chainId={wallet.chainId}
+        onWalletChange={setWallet}
+      />
 
       <main className="page-shell">
         <section key={tab} className="page-view page-enter">
-          {tab === "trade" && <TradePage />}
+          {tab === "trade" && <TradePage account={wallet.account} chainId={wallet.chainId} />}
           {tab === "explore" && <ExplorePage />}
-          {tab === "pool" && <PoolPage />}
+          {tab === "pool" && <PoolPage account={wallet.account} chainId={wallet.chainId} />}
           {tab === "terms" && <TermsPage />}
         </section>
       </main>
